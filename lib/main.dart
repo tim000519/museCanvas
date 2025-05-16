@@ -16,7 +16,7 @@ class MyMelodyApp extends StatelessWidget {
       title: 'Music Canvas',
       theme: ThemeData(
         primaryColor: const Color.fromARGB(255, 255, 233, 125),
-        scaffoldBackgroundColor: const Color.fromARGB(255, 253, 240, 240),
+        scaffoldBackgroundColor: const Color.fromARGB(255, 255, 255, 255),
         colorScheme: ColorScheme.fromSeed(seedColor: Color.fromARGB(255, 0, 0, 0),),
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(

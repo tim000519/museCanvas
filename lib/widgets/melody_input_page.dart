@@ -1,13 +1,13 @@
 // lib/widgets/melody_input_page.dart
 import 'dart:async';
-import 'dart:convert';
+// import 'dart:convert';
 import 'dart:io' show File, Directory;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
-import 'package:http/http.dart' as http;
+// import 'package:http/http.dart' as http;
 
 import '../models/note_event.dart';
 import '../painters/sheet_music_painter.dart';
@@ -56,7 +56,7 @@ class _MelodyInputPageState extends State<MelodyInputPage> {
 
   int tick = 0;
   int totalCountdownTicks = countdown * 2; // 0.5초 단위
-  int maxTicks = totalCountdownTicks + totalBeats; // 전체 녹음까지 포함
+  // int maxTicks = totalCountdownTicks + totalBeats; // 전체 녹음까지 포함
 
   setState(() {
     countdown = countdown;
