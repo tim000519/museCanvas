@@ -1,11 +1,12 @@
+import 'dart:html' as html;
 import 'package:flutter/material.dart';
-import 'package:audioplayers/audioplayers.dart';
+import '../services/audio_cache.dart';
 
 class PianoKey extends StatefulWidget {
-  final String note;
+  final String note; // 예: 'C4'
   final VoidCallback onPress;
   final VoidCallback onRelease;
-  final bool isBlack; // 검은 건반 여부
+  final bool isBlack;
 
   const PianoKey({
     Key? key,
@@ -16,29 +17,25 @@ class PianoKey extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _PianoKeyState createState() => _PianoKeyState();
+  State<PianoKey> createState() => _PianoKeyState();
 }
 
 class _PianoKeyState extends State<PianoKey> {
+  late html.AudioElement _audio;
   bool isPressed = false;
 
-  final AudioPlayer _player = AudioPlayer();
+  @override
+  void initState() {
+    super.initState();
 
-  void playSound() async {
-    String fileName = widget.note;
-    try {
-      // 현재 재생 중인 소리가 있다면 중지한 후 재생합니다.
-      await _player.stop();
-      await _player.play(AssetSource('sounds/$fileName.mp3'));
-    } catch (error) {
-      print("Error playing sound: $error");
-    }
+    // 오디오 미리 생성 (캐시됨)
+    _audio = html.AudioElement('sounds/${widget.note}.mp3')
+      ..preload = 'auto'
+      ..load();
   }
 
-  @override
-  void dispose() {
-    _player.dispose(); // AudioPlayer 리소스 해제
-    super.dispose();
+  void playSound() {
+    playCachedNote(widget.note);
   }
 
   @override
@@ -66,11 +63,13 @@ class _PianoKeyState extends State<PianoKey> {
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 100),
         transform: isPressed
-            ? Matrix4.translationValues(0, 5, 0) // 눌렀을 때 아래로 살짝 이동
+            ? Matrix4.translationValues(0, 5, 0)
             : Matrix4.identity(),
         width: widget.isBlack ? 30 : 50,
         height: widget.isBlack ? 100 : 150,
-        margin: widget.isBlack ? const EdgeInsets.symmetric(horizontal: 5) : EdgeInsets.zero,
+        margin: widget.isBlack
+            ? const EdgeInsets.symmetric(horizontal: 5)
+            : EdgeInsets.zero,
         decoration: BoxDecoration(
           color: isPressed
               ? const Color.fromRGBO(155, 62, 51, 1)
@@ -80,7 +79,7 @@ class _PianoKeyState extends State<PianoKey> {
           border: Border.all(color: Colors.black),
           borderRadius: BorderRadius.circular(4),
           boxShadow: isPressed
-              ? [] // 눌렀을 때는 그림자 제거 (눌림 느낌)
+              ? []
               : [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.3),

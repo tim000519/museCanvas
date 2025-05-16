@@ -5,6 +5,7 @@ import 'dart:io' show File, Directory;
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import '../services/audio_cache.dart';
 import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:path_provider/path_provider.dart';
 // import 'package:http/http.dart' as http;
@@ -24,6 +25,17 @@ class MelodyInputPage extends StatefulWidget {
 }
 
 class _MelodyInputPageState extends State<MelodyInputPage> {
+  @override
+  void initState() {
+    super.initState();
+
+    preloadAllNotes([
+      'C', 'C_sharp', 'D', 'D_sharp', 'E', 'F', 'F_sharp', 'G', 'G_sharp', 'A', 'A_sharp', 'B',
+      'C_oct', 'C_sharp_oct', 'D_oct', 'D_sharp_oct', 'E_oct', 'F_oct', 'F_sharp_oct',
+      'G_oct', 'G_sharp_oct', 'A_oct', 'A_sharp_oct', 'B_oct',
+    ]);
+  }
+  
   bool isRecording = false;
   Timer? metronomeTimer;
   int currentBeat = 0;
@@ -152,7 +164,7 @@ class _MelodyInputPageState extends State<MelodyInputPage> {
   Future<void> downloadMidiFile(
       BuildContext context, List<NoteEvent> recordedNotes, List<dynamic> genre) async {
     print("장르 설정: $genre");
-    const serverUrl = "http://localhost:8000";
+    const serverUrl = "https://10ce-168-188-125-210.ngrok-free.app";
     final response = await processMelody(recordedNotes, serverUrl, genre);
     
     if (response.statusCode == 200) {
